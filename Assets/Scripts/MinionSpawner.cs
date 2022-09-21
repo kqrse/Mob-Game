@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Globals;
+using Pathfinding;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
@@ -11,6 +12,7 @@ public class MinionSpawner : MonoBehaviour {
     private Bounds _spawnBounds;
 
     [SerializeField] private GameObject minion;
+    [SerializeField] private Transform mousePos;
 
     public static event EventHandler OnMinionSpawn;
     public PlayerNumber playerNumber;
@@ -34,7 +36,10 @@ public class MinionSpawner : MonoBehaviour {
         Vector2 spawnCoordinate = new Vector2(
             Random.Range(_spawnBounds.min.x, _spawnBounds.max.x),
             Random.Range(_spawnBounds.min.y, _spawnBounds.max.y));
-        Instantiate(minion, spawnCoordinate, Quaternion.identity);
+        
+        GameObject minionObj = Instantiate(minion, spawnCoordinate, Quaternion.identity);
+        if (playerNumber == PlayerNumber.One)
+            minionObj.GetComponent<AIDestinationSetter>().target = mousePos;
     }
 
     private void BeginAsserts() {

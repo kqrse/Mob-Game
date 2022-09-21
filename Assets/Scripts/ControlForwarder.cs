@@ -18,19 +18,19 @@ public class ControlForwarder : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        MoveMinions();
+        // MoveMinions();
     }
 
     private void MoveMinions() {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(
-            new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-
-        foreach (var m in _player1Minions) {
-            Vector2 minionPos = new Vector2(m.transform.position.x, m.transform.position.y);
-            Vector2 direction = mousePos - minionPos;
-            direction.Normalize();
-            m.Move(direction);
-        }
+        // Vector2 mousePos = Camera.main.ScreenToWorldPoint(
+        //     new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+        //
+        // foreach (var m in _player1Minions) {
+        //     Vector2 minionPos = new Vector2(m.transform.position.x, m.transform.position.y);
+        //     Vector2 direction = mousePos - minionPos;
+        //     direction.Normalize();
+        //     m.Move(direction);
+        // }
     }
 
     private void UpdateMinionList(object sender, EventArgs e) {
