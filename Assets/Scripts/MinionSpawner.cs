@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Globals;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
 public class MinionSpawner : MonoBehaviour {
-    private float _spawnCooldown = 1f;
+    [SerializeField] private GameObject minionPrefab;
+    public PlayerNumber playerNumber;
+    private readonly float _spawnCooldown = 1f;
     private Bounds _spawnBounds;
 
-    [SerializeField] private GameObject minion;
-
-    public static event EventHandler OnMinionSpawn;
-    public PlayerNumber playerNumber;
-    
-    void Start() {
-        BeginAsserts();
+    private void Start() {
         BeginGetComponents();
+        BeginAsserts();
         StartCoroutine(StartSpawnMinion());
     }
 
-    void Update() { }
+    private void Update() {
+    }
+
+    public static event EventHandler OnMinionSpawn;
 
     private IEnumerator StartSpawnMinion() {
         yield return new WaitForSeconds(_spawnCooldown);
@@ -31,15 +30,26 @@ public class MinionSpawner : MonoBehaviour {
     }
 
     private void SpawnMinion() {
-        Vector2 spawnCoordinate = new Vector2(
-            Random.Range(_spawnBounds.min.x, _spawnBounds.max.x),
-            Random.Range(_spawnBounds.min.y, _spawnBounds.max.y));
-        Instantiate(minion, spawnCoordinate, Quaternion.identity);
+        var offset = 0.5f;
+        var offsetX = Random.Range(-offset, offset);
+        var offsetY = Random.Range(-offset, offset);
+
+        var spawnCoordinate = _spawnBounds.center + new Vector3(offsetX, offsetY, 0);
+        // Random.Range(_spawnBounds.min.x, _spawnBounds.max.x),
+        // Random.Range(_spawnBounds.min.y, _spawnBounds.max.y));
+
+        // Debug.Log(_spawnBounds.center);
+        // Debug.Log(_spawnBounds.extents);
+        // Debug.Log(spawnCoordinate);
+
+        var minion = Instantiate(minionPrefab, spawnCoordinate, Quaternion.identity)
+            .GetComponent<BaseMinion>();
+        minion.playerNumber = playerNumber;
     }
 
     private void BeginAsserts() {
         Assert.IsFalse(playerNumber == PlayerNumber.Unassigned);
-        Assert.IsNotNull(minion);
+        Assert.IsNotNull(minionPrefab);
     }
 
     private void BeginGetComponents() {
