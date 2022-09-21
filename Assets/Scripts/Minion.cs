@@ -8,6 +8,7 @@ public class Minion : MonoBehaviour {
     public PlayerNumber playerNumber;
     private float _movementSpeed = 2f;
     private Rigidbody2D _rb;
+    private SpriteRenderer _sr;
     void Start() {
         BeginAsserts();
         BeginGetComponents();
@@ -19,6 +20,8 @@ public class Minion : MonoBehaviour {
 
     public void Move(Vector2 direction) {
         _rb.velocity = direction * _movementSpeed;
+
+        _sr.flipX = _rb.velocity.x > 0;
     }
 
     private void BeginAsserts() {
@@ -27,5 +30,6 @@ public class Minion : MonoBehaviour {
 
     private void BeginGetComponents() {
         _rb = GetComponent<Rigidbody2D>();
+        _sr = GetComponent<SpriteRenderer>();
     }
 }
