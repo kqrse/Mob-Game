@@ -1,17 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Globals;
 using UnityEngine;
 
 public class MinionStunState : StateMachineBehaviour {
     private BaseMinion _baseMinionScript;
 
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         _baseMinionScript = animator.GetComponent<BaseMinion>();
+        animator.SetBool(AnimParams.MinionIsMoving, false);
+        animator.SetBool(AnimParams.MinionIsAttack, false);
     }
 
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
     }
 }

@@ -12,7 +12,7 @@ public class MinionAttackState : StateMachineBehaviour {
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        // animator.SetBool(AnimParams.MinionIsAttack, false);
+        animator.SetBool(AnimParams.MinionIsAttack, false);
         _sr.color = Color.white;
     }
 

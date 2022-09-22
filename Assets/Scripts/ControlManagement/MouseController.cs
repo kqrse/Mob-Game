@@ -16,7 +16,7 @@ public class MouseController : PlayerController {
         SetMinionDirections();
         if (Input.GetKeyDown(KeyCode.Space))
             foreach (var m in minionsList)
-                if (!m.animator.GetBool(AnimParams.MinionIsActive))
+                if (!m.animator.GetBool(AnimParams.MinionIsAwake))
                     m.IdleWakeUp();
     }
 
@@ -27,7 +27,11 @@ public class MouseController : PlayerController {
 
         foreach (var m in minionsList) {
             var minionPos = new Vector2(m.transform.position.x, m.transform.position.y);
-            m.direction = (mousePos - minionPos).normalized;
+            var direction = mousePos - minionPos;
+            if (Mathf.Abs(direction.x) < MovementTolerance) direction.x = 0;
+            if (Mathf.Abs(direction.y) < MovementTolerance) direction.y = 0;
+            m.animator.SetBool(AnimParams.MinionIsMoving, m.direction.normalized != Vector2.zero);
+            m.direction = direction.normalized;
         }
     }
 }

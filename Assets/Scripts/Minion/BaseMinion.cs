@@ -10,7 +10,9 @@ public class BaseMinion : MonoBehaviour {
     [NonSerialized] public Vector2 direction;
 
     private MinionMeleeRange _minionMeleeRange;
+    private float _minionMeleeRangeAOE = 1f;
     private MinionAttackPoint _minionAttackPoint;
+    [SerializeField] private GameObject meleeAttackAnim;
 
     protected float MovementSpeed = 2f;
     protected float AttackCooldown = 0.75f;
@@ -22,10 +24,15 @@ public class BaseMinion : MonoBehaviour {
     private SpriteRenderer _sr;
     private CircleCollider2D _footprintCollider;
 
+    protected Health MinionHealth;
+    protected int MaxHealth = 3;
+
     protected virtual void Start() {
         BeginGetBaseComponents();
+        BeginBaseAsserts();
         BeginGetComponents();
         BeginAsserts();
+        MinionHealth.Init(MaxHealth);
         _minionMeleeRange.OnMeleeRangeEntered += EnterAttack;
     }
 
@@ -44,31 +51,44 @@ public class BaseMinion : MonoBehaviour {
     protected virtual IEnumerator StartAttack() {
         animator.SetBool(AnimParams.MinionIsAttack, true);
         animator.SetBool(AnimParams.MinionCanAttack, false);
-        _rb.velocity = Vector2.zero;
+        // _rb.velocity = Vector2.zero;
+        _rb.bodyType = RigidbodyType2D.Kinematic;
+        var attackPointPos = _attackPoint.transform.position;
+        _sr.flipX = attackPointPos.x - transform.position.x > 0;
+
+        Physics2D.OverlapCircleAll(_attackPoint.position, _minionMeleeRangeAOE,
+            LayerMask.NameToLayer("Attackable"));
+        Instantiate(meleeAttackAnim, attackPointPos, Quaternion.identity);
 
         yield return new WaitForSeconds(AttackCooldown * AttackRecoverySpeed);
+        _rb.bodyType = RigidbodyType2D.Dynamic;
         animator.SetBool(AnimParams.MinionIsAttack, false);
+
         yield return new WaitForSeconds(AttackCooldown * AttackRecoverySpeed);
         animator.SetBool(AnimParams.MinionCanAttack, true);
     }
 
     public void Move() {
+        if (!animator.GetBool(AnimParams.MinionIsActive)) return;
         _rb.velocity = direction * MovementSpeed;
-        _sr.flipX = _rb.velocity.x > 0;
+
+        if (_rb.velocity != Vector2.zero)
+            _sr.flipX = direction.x > 0;
     }
 
     public void IdleWakeUp() {
+        animator.SetBool(AnimParams.MinionIsAwake, true);
         animator.SetBool(AnimParams.MinionIsActive, true);
         _rb.bodyType = RigidbodyType2D.Dynamic;
         _footprintCollider.isTrigger = false;
     }
 
     protected virtual void BeginAsserts() {
-        Assert.IsFalse(playerNumber == PlayerNumber.Unassigned);
         Assert.IsNotNull(_minionMeleeRange);
         Assert.IsNotNull(_minionAttackPoint);
         Assert.IsNotNull(_attackRangeCollider);
         Assert.IsNotNull(_attackPoint);
+        Assert.IsNotNull(meleeAttackAnim);
     }
 
     protected virtual void BeginGetComponents() {
@@ -78,10 +98,20 @@ public class BaseMinion : MonoBehaviour {
         _attackPoint = _minionAttackPoint.transform;
     }
 
+    protected void BeginBaseAsserts() {
+        Assert.IsFalse(playerNumber == PlayerNumber.Unassigned);
+        Assert.IsNotNull(_rb);
+        Assert.IsNotNull(_sr);
+        Assert.IsNotNull(animator);
+        Assert.IsNotNull(_footprintCollider);
+        Assert.IsNotNull(MinionHealth);
+    }
+
     protected void BeginGetBaseComponents() {
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         _footprintCollider = GetComponentInChildren<Footprint>().GetFootprintCollider();
+        MinionHealth = GetComponent<Health>();
     }
 }

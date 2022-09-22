@@ -73,42 +73,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""UpMenuButton"",
-                    ""type"": ""Button"",
-                    ""id"": ""78847ce8-3bb2-4ee8-880c-3b3e191feadf"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""LeftMenuButton"",
-                    ""type"": ""Button"",
-                    ""id"": ""3351623a-b070-424a-8479-7311126d9c40"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""RightMenuButton"",
-                    ""type"": ""Button"",
-                    ""id"": ""86df74de-1863-48ae-ab2e-15e0615c7acc"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""DownMenuButton"",
-                    ""type"": ""Button"",
-                    ""id"": ""841843ed-b05e-4af2-a9fc-83b092a9871a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""ToggleAutoActive"",
                     ""type"": ""Button"",
                     ""id"": ""ab5e51b2-fc12-4886-b354-79fce0b333bd"",
@@ -139,6 +103,24 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""name"": ""WakeMinions"",
                     ""type"": ""Button"",
                     ""id"": ""7a2074cc-992e-4cdf-ac5c-8c1f0a342131"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MenuMovement"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ed7d8412-4689-4ac8-86bf-3eb951569b3d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NormalizeSpeed"",
+                    ""type"": ""Button"",
+                    ""id"": ""0dd59cf9-0078-4931-9dae-fbaac6388a8a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -247,50 +229,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a0c58754-b1e4-4ab4-bff1-314c8bcb43b7"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad Scheme"",
-                    ""action"": ""UpMenuButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""61de9e99-acc5-45ba-bb0c-64b0aff2810b"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad Scheme"",
-                    ""action"": ""LeftMenuButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7cc1c48a-501d-4ae5-bf24-3284166d96bb"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad Scheme"",
-                    ""action"": ""RightMenuButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bafcf924-6881-4ed0-9220-b9f85ca00c65"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad Scheme"",
-                    ""action"": ""DownMenuButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""872d13a0-cc39-4326-8e93-0f06a3e19c99"",
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
@@ -303,7 +241,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c8b93313-cb6b-4eba-9552-947d15ad6c58"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad Scheme"",
@@ -314,7 +252,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8e1624c7-4af4-4f80-80eb-dee7e7b1fabf"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad Scheme"",
@@ -325,11 +263,77 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bcba22d0-c73e-4499-8a6f-6f171cc0e5e2"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad Scheme"",
                     ""action"": ""WakeMinions"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""67728cb2-b1d6-40f7-b7da-0b2c64785fb0"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuMovement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""0982610d-0411-4df8-b827-021d2b86f93f"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""439bdb0c-ef2d-4d4c-9e9d-e4dec9e77e9c"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b5877099-7b46-4612-b1a3-04e20e460ab8"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""a86c50b5-eb1c-43e2-b4ca-a520ef0305cd"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""217e695c-cf01-4ae2-bc72-bbcc275930d4"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NormalizeSpeed"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -357,14 +361,12 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_Ingame_RangedMinionControlGroup = m_Ingame.FindAction("RangedMinionControlGroup", throwIfNotFound: true);
         m_Ingame_TankMinionControlGroup = m_Ingame.FindAction("TankMinionControlGroup", throwIfNotFound: true);
         m_Ingame_MagicMinionControlGroup = m_Ingame.FindAction("MagicMinionControlGroup", throwIfNotFound: true);
-        m_Ingame_UpMenuButton = m_Ingame.FindAction("UpMenuButton", throwIfNotFound: true);
-        m_Ingame_LeftMenuButton = m_Ingame.FindAction("LeftMenuButton", throwIfNotFound: true);
-        m_Ingame_RightMenuButton = m_Ingame.FindAction("RightMenuButton", throwIfNotFound: true);
-        m_Ingame_DownMenuButton = m_Ingame.FindAction("DownMenuButton", throwIfNotFound: true);
         m_Ingame_ToggleAutoActive = m_Ingame.FindAction("ToggleAutoActive", throwIfNotFound: true);
         m_Ingame_ConfirmMenuButton = m_Ingame.FindAction("ConfirmMenuButton", throwIfNotFound: true);
         m_Ingame_BackMenuButton = m_Ingame.FindAction("BackMenuButton", throwIfNotFound: true);
         m_Ingame_WakeMinions = m_Ingame.FindAction("WakeMinions", throwIfNotFound: true);
+        m_Ingame_MenuMovement = m_Ingame.FindAction("MenuMovement", throwIfNotFound: true);
+        m_Ingame_NormalizeSpeed = m_Ingame.FindAction("NormalizeSpeed", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -429,14 +431,12 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Ingame_RangedMinionControlGroup;
     private readonly InputAction m_Ingame_TankMinionControlGroup;
     private readonly InputAction m_Ingame_MagicMinionControlGroup;
-    private readonly InputAction m_Ingame_UpMenuButton;
-    private readonly InputAction m_Ingame_LeftMenuButton;
-    private readonly InputAction m_Ingame_RightMenuButton;
-    private readonly InputAction m_Ingame_DownMenuButton;
     private readonly InputAction m_Ingame_ToggleAutoActive;
     private readonly InputAction m_Ingame_ConfirmMenuButton;
     private readonly InputAction m_Ingame_BackMenuButton;
     private readonly InputAction m_Ingame_WakeMinions;
+    private readonly InputAction m_Ingame_MenuMovement;
+    private readonly InputAction m_Ingame_NormalizeSpeed;
     public struct IngameActions
     {
         private @Controls m_Wrapper;
@@ -446,14 +446,12 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         public InputAction @RangedMinionControlGroup => m_Wrapper.m_Ingame_RangedMinionControlGroup;
         public InputAction @TankMinionControlGroup => m_Wrapper.m_Ingame_TankMinionControlGroup;
         public InputAction @MagicMinionControlGroup => m_Wrapper.m_Ingame_MagicMinionControlGroup;
-        public InputAction @UpMenuButton => m_Wrapper.m_Ingame_UpMenuButton;
-        public InputAction @LeftMenuButton => m_Wrapper.m_Ingame_LeftMenuButton;
-        public InputAction @RightMenuButton => m_Wrapper.m_Ingame_RightMenuButton;
-        public InputAction @DownMenuButton => m_Wrapper.m_Ingame_DownMenuButton;
         public InputAction @ToggleAutoActive => m_Wrapper.m_Ingame_ToggleAutoActive;
         public InputAction @ConfirmMenuButton => m_Wrapper.m_Ingame_ConfirmMenuButton;
         public InputAction @BackMenuButton => m_Wrapper.m_Ingame_BackMenuButton;
         public InputAction @WakeMinions => m_Wrapper.m_Ingame_WakeMinions;
+        public InputAction @MenuMovement => m_Wrapper.m_Ingame_MenuMovement;
+        public InputAction @NormalizeSpeed => m_Wrapper.m_Ingame_NormalizeSpeed;
         public InputActionMap Get() { return m_Wrapper.m_Ingame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -478,18 +476,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @MagicMinionControlGroup.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnMagicMinionControlGroup;
                 @MagicMinionControlGroup.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnMagicMinionControlGroup;
                 @MagicMinionControlGroup.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnMagicMinionControlGroup;
-                @UpMenuButton.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnUpMenuButton;
-                @UpMenuButton.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnUpMenuButton;
-                @UpMenuButton.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnUpMenuButton;
-                @LeftMenuButton.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnLeftMenuButton;
-                @LeftMenuButton.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnLeftMenuButton;
-                @LeftMenuButton.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnLeftMenuButton;
-                @RightMenuButton.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnRightMenuButton;
-                @RightMenuButton.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnRightMenuButton;
-                @RightMenuButton.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnRightMenuButton;
-                @DownMenuButton.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnDownMenuButton;
-                @DownMenuButton.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnDownMenuButton;
-                @DownMenuButton.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnDownMenuButton;
                 @ToggleAutoActive.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnToggleAutoActive;
                 @ToggleAutoActive.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnToggleAutoActive;
                 @ToggleAutoActive.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnToggleAutoActive;
@@ -502,6 +488,12 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @WakeMinions.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnWakeMinions;
                 @WakeMinions.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnWakeMinions;
                 @WakeMinions.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnWakeMinions;
+                @MenuMovement.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnMenuMovement;
+                @MenuMovement.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnMenuMovement;
+                @MenuMovement.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnMenuMovement;
+                @NormalizeSpeed.started -= m_Wrapper.m_IngameActionsCallbackInterface.OnNormalizeSpeed;
+                @NormalizeSpeed.performed -= m_Wrapper.m_IngameActionsCallbackInterface.OnNormalizeSpeed;
+                @NormalizeSpeed.canceled -= m_Wrapper.m_IngameActionsCallbackInterface.OnNormalizeSpeed;
             }
             m_Wrapper.m_IngameActionsCallbackInterface = instance;
             if (instance != null)
@@ -521,18 +513,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @MagicMinionControlGroup.started += instance.OnMagicMinionControlGroup;
                 @MagicMinionControlGroup.performed += instance.OnMagicMinionControlGroup;
                 @MagicMinionControlGroup.canceled += instance.OnMagicMinionControlGroup;
-                @UpMenuButton.started += instance.OnUpMenuButton;
-                @UpMenuButton.performed += instance.OnUpMenuButton;
-                @UpMenuButton.canceled += instance.OnUpMenuButton;
-                @LeftMenuButton.started += instance.OnLeftMenuButton;
-                @LeftMenuButton.performed += instance.OnLeftMenuButton;
-                @LeftMenuButton.canceled += instance.OnLeftMenuButton;
-                @RightMenuButton.started += instance.OnRightMenuButton;
-                @RightMenuButton.performed += instance.OnRightMenuButton;
-                @RightMenuButton.canceled += instance.OnRightMenuButton;
-                @DownMenuButton.started += instance.OnDownMenuButton;
-                @DownMenuButton.performed += instance.OnDownMenuButton;
-                @DownMenuButton.canceled += instance.OnDownMenuButton;
                 @ToggleAutoActive.started += instance.OnToggleAutoActive;
                 @ToggleAutoActive.performed += instance.OnToggleAutoActive;
                 @ToggleAutoActive.canceled += instance.OnToggleAutoActive;
@@ -545,6 +525,12 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @WakeMinions.started += instance.OnWakeMinions;
                 @WakeMinions.performed += instance.OnWakeMinions;
                 @WakeMinions.canceled += instance.OnWakeMinions;
+                @MenuMovement.started += instance.OnMenuMovement;
+                @MenuMovement.performed += instance.OnMenuMovement;
+                @MenuMovement.canceled += instance.OnMenuMovement;
+                @NormalizeSpeed.started += instance.OnNormalizeSpeed;
+                @NormalizeSpeed.performed += instance.OnNormalizeSpeed;
+                @NormalizeSpeed.canceled += instance.OnNormalizeSpeed;
             }
         }
     }
@@ -565,13 +551,11 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         void OnRangedMinionControlGroup(InputAction.CallbackContext context);
         void OnTankMinionControlGroup(InputAction.CallbackContext context);
         void OnMagicMinionControlGroup(InputAction.CallbackContext context);
-        void OnUpMenuButton(InputAction.CallbackContext context);
-        void OnLeftMenuButton(InputAction.CallbackContext context);
-        void OnRightMenuButton(InputAction.CallbackContext context);
-        void OnDownMenuButton(InputAction.CallbackContext context);
         void OnToggleAutoActive(InputAction.CallbackContext context);
         void OnConfirmMenuButton(InputAction.CallbackContext context);
         void OnBackMenuButton(InputAction.CallbackContext context);
         void OnWakeMinions(InputAction.CallbackContext context);
+        void OnMenuMovement(InputAction.CallbackContext context);
+        void OnNormalizeSpeed(InputAction.CallbackContext context);
     }
 }

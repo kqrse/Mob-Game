@@ -3,7 +3,7 @@ using Globals;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace ControlMangement {
+namespace ControlManagement {
     public class GamepadController : PlayerController {
         private Vector2 _currentMoveVector = Vector2.zero;
         private float _cursorMoveSpeed = 10f;
@@ -15,7 +15,7 @@ namespace ControlMangement {
 
         public void OnWakeMinions(InputAction.CallbackContext context) {
             foreach (var m in minionsList)
-                if (!m.animator.GetBool(AnimParams.MinionIsActive))
+                if (!m.animator.GetBool(AnimParams.MinionIsAwake))
                     m.IdleWakeUp();
         }
 

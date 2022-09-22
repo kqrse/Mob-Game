@@ -43,12 +43,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Minion
-    uniqueID: 4048407389
+  - name: Background
+    uniqueID: 1452741179
     locked: 0
   - name: Building
     uniqueID: 3135291307
     locked: 0
-  - name: Background
-    uniqueID: 1452741179
+  - name: Minion
+    uniqueID: 4048407389
+    locked: 0
+  - name: Projectile
+    uniqueID: 2480396845
+    locked: 0
+  - name: Effect
+    uniqueID: 1080613871
     locked: 0

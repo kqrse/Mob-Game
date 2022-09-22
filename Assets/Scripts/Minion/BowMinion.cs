@@ -9,10 +9,12 @@ public class BowMinion : BaseMinion {
     private MinionAttackPoint _minionRangedPoint;
 
     protected override void Start() {
-        BeginGetComponents();
         BeginGetBaseComponents();
+        BeginBaseAsserts();
+        BeginGetComponents();
         BeginAsserts();
         InitializeStats();
+        MinionHealth.Init(MaxHealth);
         _minionRangedRange.OnRangedRangeEntered += EnterAttack;
     }
 
@@ -23,6 +25,7 @@ public class BowMinion : BaseMinion {
         MovementSpeed = 2.25f;
         AttackCooldown = 1f;
         AttackRecoverySpeed = 0.4f;
+        MaxHealth = 3;
     }
 
     // protected override void EnterAttack(object sender, EventArgs e) {
@@ -52,6 +55,7 @@ public class BowMinion : BaseMinion {
         Assert.IsNotNull(_minionRangedPoint);
         Assert.IsNotNull(_attackRangeCollider);
         Assert.IsNotNull(_attackPoint);
+        Assert.IsNotNull(MinionHealth);
     }
 
     protected override void BeginGetComponents() {
