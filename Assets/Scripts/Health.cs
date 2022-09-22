@@ -5,19 +5,20 @@ using UnityEngine;
 
 public class Health : MonoBehaviour {
     public event EventHandler OnHealthDepleted;
-    private int _maxHealthValue;
-    private int _currHealthValue;
+    [SerializeField] private float _maxHealthValue;
+    [SerializeField] private float _currHealthValue;
 
-    public void Init(int maxHealth) {
+    public void Init(float maxHealth) {
         _maxHealthValue = maxHealth;
+        _currHealthValue = _maxHealthValue;
     }
 
-    public void Heal(int healValue) {
+    public void Heal(float healValue) {
         _currHealthValue += healValue;
         SetHealthValidation();
     }
 
-    public void Damage(int damageValue) {
+    public void Damage(float damageValue) {
         _currHealthValue -= damageValue;
         SetHealthValidation();
     }

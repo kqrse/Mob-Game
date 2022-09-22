@@ -10,7 +10,7 @@ public class BaseMinion : MonoBehaviour {
     [NonSerialized] public Vector2 direction;
 
     private MinionMeleeRange _minionMeleeRange;
-    private float _minionMeleeRangeAOE = 1f;
+    private float _minionMeleeRangeAOE = 0.1f;
     private MinionAttackPoint _minionAttackPoint;
     [SerializeField] private GameObject meleeAttackAnim;
 
@@ -18,14 +18,16 @@ public class BaseMinion : MonoBehaviour {
     protected float AttackCooldown = 0.75f;
     protected float AttackRecoverySpeed = 0.5f;
 
-    protected Transform _attackPoint;
+    [SerializeField] protected Transform _attackPoint;
     protected CircleCollider2D _attackRangeCollider;
     private Rigidbody2D _rb;
     private SpriteRenderer _sr;
     private CircleCollider2D _footprintCollider;
 
     protected Health MinionHealth;
-    protected int MaxHealth = 3;
+    protected float MaxHealth = 3;
+    protected float BaseDamage = 1;
+    protected bool IsAttackAOE = false;
 
     protected virtual void Start() {
         BeginGetBaseComponents();
@@ -40,8 +42,7 @@ public class BaseMinion : MonoBehaviour {
     }
 
     protected virtual void EnterAttack(object sender, EventArgs e) {
-        if (animator.GetBool(AnimParams.MinionIsStunned) ||
-            animator.GetBool(AnimParams.MinionIsAttack) ||
+        if (animator.GetBool(AnimParams.MinionIsStunned) || animator.GetBool(AnimParams.MinionIsAttack) ||
             !animator.GetBool(AnimParams.MinionCanAttack))
             return;
 
@@ -51,13 +52,35 @@ public class BaseMinion : MonoBehaviour {
     protected virtual IEnumerator StartAttack() {
         animator.SetBool(AnimParams.MinionIsAttack, true);
         animator.SetBool(AnimParams.MinionCanAttack, false);
-        // _rb.velocity = Vector2.zero;
+        _rb.velocity = Vector2.zero;
         _rb.bodyType = RigidbodyType2D.Kinematic;
         var attackPointPos = _attackPoint.transform.position;
         _sr.flipX = attackPointPos.x - transform.position.x > 0;
 
-        Physics2D.OverlapCircleAll(_attackPoint.position, _minionMeleeRangeAOE,
-            LayerMask.NameToLayer("Attackable"));
+        var enemiesHit = Physics2D.OverlapCircleAll(attackPointPos, _minionMeleeRangeAOE,
+            LayerMask.GetMask("Attackable"));
+
+        if (IsAttackAOE) {
+            foreach (var enemyCollider in enemiesHit) {
+                var enemyHealth = enemyCollider.GetComponent<Health>();
+                enemyHealth.Damage(GetDamageValue());
+            }
+        }
+        else {
+            var closestCollider = enemiesHit[0];
+
+            var closestDistance = Vector2.Distance(attackPointPos, closestCollider.transform.position);
+            foreach (var currentCollider in enemiesHit) {
+                var enemyDistance = Vector2.Distance(attackPointPos, currentCollider.transform.position);
+                if (enemyDistance < closestDistance) closestCollider = currentCollider;
+            }
+
+            Debug.Log("ATTACKER: " + gameObject.name + " <> " + "TARGET: " + closestCollider.gameObject.name);
+            var enemyHealth = closestCollider.gameObject.GetComponent<Health>();
+            Assert.IsNotNull(enemyHealth);
+            enemyHealth.Damage(GetDamageValue());
+        }
+
         Instantiate(meleeAttackAnim, attackPointPos, Quaternion.identity);
 
         yield return new WaitForSeconds(AttackCooldown * AttackRecoverySpeed);
@@ -66,6 +89,16 @@ public class BaseMinion : MonoBehaviour {
 
         yield return new WaitForSeconds(AttackCooldown * AttackRecoverySpeed);
         animator.SetBool(AnimParams.MinionCanAttack, true);
+    }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.blue;
+        //Use the same vars you use to draw your Overlap SPhere to draw your Wire Sphere.
+        Gizmos.DrawWireSphere(_attackPoint.position, _minionMeleeRangeAOE);
+    }
+
+    protected virtual float GetDamageValue() {
+        return BaseDamage;
     }
 
     public void Move() {

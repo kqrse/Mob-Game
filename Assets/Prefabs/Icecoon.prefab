@@ -294,6 +294,7 @@ MonoBehaviour:
   playerNumber: 0
   meleeAttackAnim: {fileID: 2259529378226096480, guid: 2412f31b20805b247810421907f21f83,
     type: 3}
+  _attackPoint: {fileID: 1388894988}
 --- !u!114 &4661645506256477922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,6 +307,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47832895e35bcfd4bbd0e7572f01c16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxHealthValue: 0
+  _currHealthValue: 0
 --- !u!50 &4318620954245073972
 Rigidbody2D:
   serializedVersion: 4
