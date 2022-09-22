@@ -9,7 +9,6 @@ public class MinionAttackState : StateMachineBehaviour {
         _baseMinionScript = animator.GetComponent<BaseMinion>();
         _sr = animator.GetComponent<SpriteRenderer>();
         _sr.color = Color.red;
-        Debug.Log("ENTERED ATTACK STATE");
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

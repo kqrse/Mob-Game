@@ -69,9 +69,9 @@ GameObject:
   - component: {fileID: 5165396487923188875}
   - component: {fileID: 6228593021984563819}
   - component: {fileID: 2009204475}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ice Base
-  m_TagString: Untagged
+  m_TagString: MinionSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -154,8 +154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb6bd33d047803e4bbf50eb296a61010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minionPrefab: {fileID: 496656087616659129, guid: 7cf508be93903744194d20eecc9ac1a6,
+  baseMinionPrefab: {fileID: 496656087616659129, guid: 7cf508be93903744194d20eecc9ac1a6,
     type: 3}
+  bowMinionPrefab: {fileID: 3445324492230869565, guid: 582f3d1d4f0011d4f83c884421bf9f71,
+    type: 3}
+  isSpawning: 1
   playerNumber: 0
 --- !u!61 &2009204475
 BoxCollider2D:
@@ -164,13 +167,13 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5165396487923188874}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.05, y: 0}
+  m_Offset: {x: 0.062238216, y: -0.018712372}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -181,5 +184,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.45}
+  m_Size: {x: 0.27552357, y: 0.28878617}
   m_EdgeRadius: 0

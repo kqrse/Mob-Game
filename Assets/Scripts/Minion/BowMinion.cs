@@ -6,12 +6,14 @@ using UnityEngine.Assertions;
 
 public class BowMinion : BaseMinion {
     private MinionRangedRange _minionRangedRange;
-    private MinionRangedPoint _minionRangedPoint;
+    private MinionAttackPoint _minionRangedPoint;
 
     protected override void Start() {
+        BeginGetComponents();
         BeginGetBaseComponents();
         BeginAsserts();
         InitializeStats();
+        _minionRangedRange.OnRangedRangeEntered += EnterAttack;
     }
 
     private void Update() {
@@ -46,11 +48,15 @@ public class BowMinion : BaseMinion {
 
     protected override void BeginAsserts() {
         Assert.IsFalse(playerNumber == PlayerNumber.Unassigned);
+        Assert.IsNotNull(_minionRangedRange);
+        Assert.IsNotNull(_minionRangedPoint);
+        Assert.IsNotNull(_attackRangeCollider);
+        Assert.IsNotNull(_attackPoint);
     }
 
     protected override void BeginGetComponents() {
         _minionRangedRange = GetComponentInChildren<MinionRangedRange>();
-        _minionRangedPoint = _minionRangedRange.GetComponentInChildren<MinionRangedPoint>();
+        _minionRangedPoint = _minionRangedRange.GetComponentInChildren<MinionAttackPoint>();
         _attackRangeCollider = _minionRangedRange.GetComponent<CircleCollider2D>();
         _attackPoint = _minionRangedPoint.transform;
     }

@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Assertions;
+
+public class MinionRangedRange : MinionBaseRange {
+    public event EventHandler OnRangedRangeEntered;
+    private Transform _attackPoint;
+    private CircleCollider2D _rangeCollider;
+
+    private void Start() {
+        BeginGetComponents();
+        BeginAsserts();
+    }
+
+    private void OnTriggerEnter2D(Collider2D col) {
+        if (IsInvalidAttackTarget(col)) return;
+
+        _attackPoint.position = col.gameObject.transform.position;
+        OnRangedRangeEntered?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void OnTriggerStay2D(Collider2D col) {
+        if (IsInvalidAttackTarget(col)) return;
+
+        _attackPoint.position = col.gameObject.transform.position;
+        OnRangedRangeEntered?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void OnTriggerExit2D(Collider2D col) {
+        _attackPoint.position = transform.position;
+    }
+
+    protected override void BeginAsserts() {
+        Assert.IsNotNull(_attackPoint);
+        Assert.IsNotNull(_rangeCollider);
+    }
+
+    protected override void BeginGetComponents() {
+        _attackPoint = GetComponentInChildren<MinionAttackPoint>().transform;
+        _rangeCollider = GetComponent<CircleCollider2D>();
+    }
+}

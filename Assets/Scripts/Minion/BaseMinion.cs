@@ -10,7 +10,7 @@ public class BaseMinion : MonoBehaviour {
     [NonSerialized] public Vector2 direction;
 
     private MinionMeleeRange _minionMeleeRange;
-    private MinionMeleePoint _minionMeleePoint;
+    private MinionAttackPoint _minionAttackPoint;
 
     protected float MovementSpeed = 2f;
     protected float AttackCooldown = 0.75f;
@@ -20,6 +20,7 @@ public class BaseMinion : MonoBehaviour {
     protected CircleCollider2D _attackRangeCollider;
     private Rigidbody2D _rb;
     private SpriteRenderer _sr;
+    private CircleCollider2D _footprintCollider;
 
     protected virtual void Start() {
         BeginGetBaseComponents();
@@ -56,20 +57,31 @@ public class BaseMinion : MonoBehaviour {
         _sr.flipX = _rb.velocity.x > 0;
     }
 
+    public void IdleWakeUp() {
+        animator.SetBool(AnimParams.MinionIsActive, true);
+        _rb.bodyType = RigidbodyType2D.Dynamic;
+        _footprintCollider.isTrigger = false;
+    }
+
     protected virtual void BeginAsserts() {
         Assert.IsFalse(playerNumber == PlayerNumber.Unassigned);
+        Assert.IsNotNull(_minionMeleeRange);
+        Assert.IsNotNull(_minionAttackPoint);
+        Assert.IsNotNull(_attackRangeCollider);
+        Assert.IsNotNull(_attackPoint);
     }
 
     protected virtual void BeginGetComponents() {
         _minionMeleeRange = GetComponentInChildren<MinionMeleeRange>();
-        _minionMeleePoint = _minionMeleeRange.GetComponentInChildren<MinionMeleePoint>();
+        _minionAttackPoint = _minionMeleeRange.GetComponentInChildren<MinionAttackPoint>();
         _attackRangeCollider = _minionMeleeRange.GetComponent<CircleCollider2D>();
-        _attackPoint = _minionMeleePoint.transform;
+        _attackPoint = _minionAttackPoint.transform;
     }
 
     protected void BeginGetBaseComponents() {
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        _footprintCollider = GetComponentInChildren<Footprint>().GetFootprintCollider();
     }
 }

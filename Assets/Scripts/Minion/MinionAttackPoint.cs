@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MinionMeleePoint : MonoBehaviour {
+public class MinionAttackPoint : MonoBehaviour {
     private void Start() {
     }
 
