@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Globals;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,7 +24,7 @@ namespace ControlManagement {
         }
 
         private void Update() {
-            SetMinionDirections();
+            UpdateMinions();
         }
 
         private void FixedUpdate() {
@@ -37,13 +38,22 @@ namespace ControlManagement {
             transform.position += new Vector3(movementInFrame.x, movementInFrame.y, 0);
         }
 
-        private void SetMinionDirections() {
+        private void UpdateMinions() {
             var cursorPos = new Vector2(transform.position.x, transform.position.y);
 
-            foreach (var m in minionsList) {
-                var minionPos = new Vector2(m.transform.position.x, m.transform.position.y);
-                m.direction = (cursorPos - minionPos).normalized;
-            }
+            var liveMinions = new List<BaseMinion>();
+            var hasMinionDied = false;
+            foreach (var m in minionsList)
+                if (m != null) {
+                    var minionPos = new Vector2(m.transform.position.x, m.transform.position.y);
+                    m.direction = (cursorPos - minionPos).normalized;
+                }
+                else {
+                    liveMinions.Add(m);
+                    hasMinionDied = true;
+                }
+
+            if (hasMinionDied) minionsList = liveMinions;
         }
     }
 }

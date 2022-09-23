@@ -23,8 +23,8 @@ public class BowMinion : BaseMinion {
 
     private void InitializeStats() {
         MovementSpeed = 2.25f;
-        AttackCooldown = 1f;
-        AttackRecoverySpeed = 0.4f;
+        AttackCooldownTime = 1f;
+        AttackRecoveryTime = 0.4f;
         MaxHealth = 3;
     }
 

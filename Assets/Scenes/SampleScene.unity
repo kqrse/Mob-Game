@@ -383,6 +383,11 @@ PrefabInstance:
       propertyPath: playerNumber
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6192939468230677041, guid: 7cf508be93903744194d20eecc9ac1a6,
+        type: 3}
+      propertyPath: _minionMeleeRangeAOE
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7cf508be93903744194d20eecc9ac1a6, type: 3}
 --- !u!1001 &1613936378
