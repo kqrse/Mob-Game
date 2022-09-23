@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MinionBaseRange : MonoBehaviour {
-    protected bool IsInvalidAttackTarget(Collider2D targetCollider) {
+public abstract class CollisionCheckValidTarget : MonoBehaviour {
+    protected virtual bool IsInvalidAttackTarget(Collider2D targetCollider) {
         if (targetCollider.gameObject.layer != LayerMask.NameToLayer("Attackable")) return true;
 
         if (targetCollider.CompareTag("Minion"))
@@ -17,8 +17,4 @@ public abstract class MinionBaseRange : MonoBehaviour {
 
         return true;
     }
-
-    protected abstract void BeginAsserts();
-
-    protected abstract void BeginGetComponents();
 }

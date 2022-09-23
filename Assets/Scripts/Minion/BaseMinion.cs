@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using ControlManagement;
 using Globals;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -20,11 +21,13 @@ public class BaseMinion : MonoBehaviour {
 
     [SerializeField] protected Transform _attackPoint;
     protected CircleCollider2D _attackRangeCollider;
-    private Rigidbody2D _rb;
-    private SpriteRenderer _sr;
-    private CircleCollider2D _footprintCollider;
+    protected Rigidbody2D _rb;
+    protected SpriteRenderer _sr;
+    protected CircleCollider2D _footprintCollider;
 
-    protected Health MinionHealth;
+    public Health minionHealth;
+    public HealthBar healthBar;
+    [SerializeField] private GameObject healthBarPrefab;
     protected float MaxHealth = 3;
     protected float BaseDamage = 1;
     protected bool IsAttackAOE = false;
@@ -34,8 +37,8 @@ public class BaseMinion : MonoBehaviour {
         BeginBaseAsserts();
         BeginGetComponents();
         BeginAsserts();
-        MinionHealth.Init(MaxHealth);
-        MinionHealth.OnHealthDepleted += StartDeath;
+        // minionHealth.Init(MaxHealth);
+        // minionHealth.OnHealthDepleted += StartDeath;
         _minionMeleeRange.OnMeleeRangeEntered += EnterAttack;
     }
 
@@ -75,12 +78,15 @@ public class BaseMinion : MonoBehaviour {
 
         if (IsAttackAOE) {
             foreach (var enemyCollider in enemiesHit) {
-                if (enemyCollider.GetComponent<BaseMinion>().playerNumber == playerNumber) continue;
+                var enemyMinion = enemyCollider.GetComponent<BaseMinion>();
+                if (enemyMinion == null) continue;
+                if (enemyMinion.playerNumber == playerNumber) continue;
                 var enemyHealth = enemyCollider.GetComponent<Health>();
                 enemyHealth.Damage(GetDamageValue());
             }
         }
         else {
+            if (enemiesHit.Length == 0) return;
             var closestCollider = enemiesHit[0];
 
             var closestDistance = Vector2.Distance(attackPointPos, closestCollider.transform.position);
@@ -89,8 +95,11 @@ public class BaseMinion : MonoBehaviour {
                 if (enemyDistance < closestDistance) closestCollider = currentCollider;
             }
 
-            Debug.Log("ATTACKER: " + gameObject.name + " <> " + "TARGET: " + closestCollider.gameObject.name);
-            if (closestCollider.GetComponent<BaseMinion>().playerNumber != playerNumber) {
+            // Debug.Log("ATTACKER: " + gameObject.name + " <> " + "TARGET: " + closestCollider.gameObject.name);
+            var enemyMinion = closestCollider.GetComponent<BaseMinion>();
+            if (enemyMinion == null) return;
+
+            if (enemyMinion.playerNumber != playerNumber) {
                 var enemyHealth = closestCollider.gameObject.GetComponent<Health>();
                 Assert.IsNotNull(enemyHealth);
                 enemyHealth.Damage(GetDamageValue());
@@ -98,12 +107,13 @@ public class BaseMinion : MonoBehaviour {
         }
     }
 
+
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(_attackPoint.position, _minionMeleeRangeAOE);
     }
 
-    protected virtual float GetDamageValue() {
+    public virtual float GetDamageValue() {
         return BaseDamage;
     }
 
@@ -122,19 +132,38 @@ public class BaseMinion : MonoBehaviour {
         _footprintCollider.isTrigger = false;
     }
 
-    protected void StartDeath(object e, EventArgs eventArgs) {
-        MinionHealth.OnHealthDepleted -= StartDeath;
+    protected virtual void StartDeath(object e, EventArgs eventArgs) {
+        minionHealth.OnHealthDepleted -= StartDeath;
         _minionMeleeRange.OnMeleeRangeEntered -= EnterAttack;
-        _rb.simulated = false;
         StartCoroutine(DeathAnimation());
+        StartCoroutine(DelayedHealthbarDeletion());
     }
 
-    private IEnumerator DeathAnimation() {
-        yield return new WaitForSeconds(1f);
+    private IEnumerator DelayedHealthbarDeletion() {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(healthBar.gameObject);
+    }
+
+    protected IEnumerator DeathAnimation() {
+        _rb.simulated = false;
+        var newRotation = Quaternion.Euler(0, 0, 90);
+        _sr.sortingLayerName = "Background";
+
+        while (_sr.color.a > 0) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 7.5f);
+            var color = _sr.color;
+            var newAlpha = color.a -= 0.004f;
+            _sr.color = new Color(color.r, color.g, color.b, newAlpha);
+            yield return null;
+        }
+
         FinishDeath();
     }
 
     private void FinishDeath() {
+        GameObject.FindGameObjectWithTag("MinionManager")
+            .GetComponent<MinionUpdater>()
+            .RemoveMinionFromList(this);
         Destroy(gameObject);
     }
 
@@ -144,6 +173,7 @@ public class BaseMinion : MonoBehaviour {
         Assert.IsNotNull(_attackRangeCollider);
         Assert.IsNotNull(_attackPoint);
         Assert.IsNotNull(meleeAttackAnim);
+        Assert.IsNotNull(healthBar);
     }
 
     protected virtual void BeginGetComponents() {
@@ -159,7 +189,7 @@ public class BaseMinion : MonoBehaviour {
         Assert.IsNotNull(_sr);
         Assert.IsNotNull(animator);
         Assert.IsNotNull(_footprintCollider);
-        Assert.IsNotNull(MinionHealth);
+        Assert.IsNotNull(minionHealth);
     }
 
     protected void BeginGetBaseComponents() {
@@ -167,6 +197,10 @@ public class BaseMinion : MonoBehaviour {
         _sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         _footprintCollider = GetComponentInChildren<Footprint>().GetFootprintCollider();
-        MinionHealth = GetComponent<Health>();
+        minionHealth = GetComponent<Health>();
+        minionHealth.Init(MaxHealth);
+        healthBar = Instantiate(healthBarPrefab, Vector3.zero, Quaternion.identity).GetComponent<HealthBar>();
+        healthBar.Init(transform, minionHealth, 10f);
+        minionHealth.OnHealthDepleted += StartDeath;
     }
 }

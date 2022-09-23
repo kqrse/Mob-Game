@@ -8,10 +8,10 @@ namespace ControlManagement {
     public class GamepadController : PlayerController {
         private Vector2 _currentMoveVector = Vector2.zero;
         private float _cursorMoveSpeed = 10f;
+        private Rigidbody2D _rb;
 
         public void OnMovement(InputAction.CallbackContext context) {
             _currentMoveVector = context.ReadValue<Vector2>();
-            Debug.Log(_currentMoveVector);
         }
 
         public void OnWakeMinions(InputAction.CallbackContext context) {
@@ -21,10 +21,11 @@ namespace ControlManagement {
         }
 
         private void Awake() {
+            _rb = GetComponent<Rigidbody2D>();
         }
 
         private void Update() {
-            UpdateMinions();
+            SetMinionDirections();
         }
 
         private void FixedUpdate() {
@@ -32,28 +33,25 @@ namespace ControlManagement {
         }
 
         private void MoveCursor() {
-            var moveVelocity = new Vector2(_currentMoveVector.x * _cursorMoveSpeed,
-                _currentMoveVector.y * _cursorMoveSpeed);
-            var movementInFrame = Time.deltaTime * moveVelocity;
-            transform.position += new Vector3(movementInFrame.x, movementInFrame.y, 0);
+            // var moveVelocity = new Vector2(_currentMoveVector.x * _cursorMoveSpeed,
+            //     _currentMoveVector.y * _cursorMoveSpeed);
+            // var movementInFrame = Time.deltaTime * moveVelocity;
+            // transform.position += new Vector3(movementInFrame.x, movementInFrame.y, 0);
+            if (_currentMoveVector != Vector2.zero) _rb.velocity = _currentMoveVector * _cursorMoveSpeed;
+            else _rb.velocity = Vector2.zero;
         }
 
-        private void UpdateMinions() {
+        private void SetMinionDirections() {
             var cursorPos = new Vector2(transform.position.x, transform.position.y);
 
-            var liveMinions = new List<BaseMinion>();
-            var hasMinionDied = false;
-            foreach (var m in minionsList)
-                if (m != null) {
-                    var minionPos = new Vector2(m.transform.position.x, m.transform.position.y);
-                    m.direction = (cursorPos - minionPos).normalized;
-                }
-                else {
-                    liveMinions.Add(m);
-                    hasMinionDied = true;
-                }
-
-            if (hasMinionDied) minionsList = liveMinions;
+            foreach (var m in minionsList) {
+                var minionPos = new Vector2(m.transform.position.x, m.transform.position.y);
+                var direction = cursorPos - minionPos;
+                if (Mathf.Abs(direction.x) < MovementTolerance) direction.x = 0;
+                if (Mathf.Abs(direction.y) < MovementTolerance) direction.y = 0;
+                m.animator.SetBool(AnimParams.MinionIsMoving, m.direction.normalized != Vector2.zero);
+                m.direction = direction.normalized;
+            }
         }
     }
 }

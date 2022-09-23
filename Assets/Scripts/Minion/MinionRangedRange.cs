@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class MinionRangedRange : MinionBaseRange {
+public class MinionRangedRange : CollisionCheckValidTarget {
     public event EventHandler OnRangedRangeEntered;
     private Transform _attackPoint;
     private CircleCollider2D _rangeCollider;
@@ -32,12 +32,12 @@ public class MinionRangedRange : MinionBaseRange {
         _attackPoint.position = transform.position;
     }
 
-    protected override void BeginAsserts() {
+    private void BeginAsserts() {
         Assert.IsNotNull(_attackPoint);
         Assert.IsNotNull(_rangeCollider);
     }
 
-    protected override void BeginGetComponents() {
+    private void BeginGetComponents() {
         _attackPoint = GetComponentInChildren<MinionAttackPoint>().transform;
         _rangeCollider = GetComponent<CircleCollider2D>();
     }

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Minion
   - MinionSpawner
+  - MinionManager
+  - Canvas
+  - MapBoundary
   layers:
   - Default
   - TransparentFX
@@ -17,8 +20,8 @@ TagManager:
   - 
   - Attackable
   - AttackDetection
-  - 
-  - 
+  - Cursor
+  - MapBoundary
   - 
   - 
   - 

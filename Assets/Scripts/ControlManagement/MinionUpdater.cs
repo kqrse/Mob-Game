@@ -15,7 +15,21 @@ namespace ControlManagement {
             UpdateMinionList(this, EventArgs.Empty);
         }
 
-        private void Update() {
+        public void RemoveMinionFromList(BaseMinion minion) {
+            switch (minion.playerNumber) {
+                case PlayerNumber.One:
+                    playerOneController.minionsList.Remove(minion);
+                    break;
+                case PlayerNumber.Two:
+                    playerTwoController.minionsList.Remove(minion);
+                    break;
+                case PlayerNumber.Three:
+                    playerThreeController.minionsList.Remove(minion);
+                    break;
+                case PlayerNumber.Four:
+                    playerFourController.minionsList.Remove(minion);
+                    break;
+            }
         }
 
         private void UpdateMinionList(object sender, EventArgs e) {

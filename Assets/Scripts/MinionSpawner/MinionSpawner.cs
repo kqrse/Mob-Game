@@ -65,6 +65,10 @@ public class MinionSpawner : MonoBehaviour {
         Assert.IsNotNull(minion);
         minion.playerNumber = playerNumber;
         playerController.minionsList.Add(minion);
+
+        // var healthBar = Instantiate(healthBarPrefab, Vector3.zero, Quaternion.identity).GetComponent<HealthBar>();
+        // healthBar.Init(minion.transform, minion.GetComponent<Health>(), 10f);
+        // minion.healthBar = healthBar;
     }
 
     private void BeginAsserts() {

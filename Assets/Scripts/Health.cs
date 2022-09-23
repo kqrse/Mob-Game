@@ -23,6 +23,10 @@ public class Health : MonoBehaviour {
         SetHealthValidation();
     }
 
+    public float GetCurrentHealthPercentage() {
+        return _currHealthValue / _maxHealthValue;
+    }
+
     private void SetHealthValidation() {
         if (_currHealthValue > _maxHealthValue) _currHealthValue = _maxHealthValue;
         else if (_currHealthValue < 0) _currHealthValue = 0;
