@@ -162,7 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseMinionPrefab: {fileID: 496656087616659129, guid: 7cf508be93903744194d20eecc9ac1a6,
     type: 3}
-  bowMinionPrefab: {fileID: 496656087616659129, guid: 7cf508be93903744194d20eecc9ac1a6,
+  bowMinionPrefab: {fileID: 3445324492230869565, guid: 582f3d1d4f0011d4f83c884421bf9f71,
     type: 3}
   isSpawning: 1
   playerController: {fileID: 0}
