@@ -25,8 +25,8 @@ public class BowMinion : BaseMinion {
 
     private void InitializeStats() {
         MovementSpeed = 1.75f;
-        AttackCooldownTime = 0.7f;
-        AttackRecoveryTime = 0.3f;
+        AttackCooldownTime = 0.6f;
+        AttackRecoveryTime = 0.25f;
         MaxHealth = 3;
     }
 
@@ -50,13 +50,13 @@ public class BowMinion : BaseMinion {
         var attackPointPos = _attackPoint.transform.position;
         _sr.flipX = attackPointPos.x - transform.position.x > 0;
 
-        var arrowDirection = VectorHelper.GetVectorToPoint(transform.position,
-            new Vector3(attackPointPos.x, attackPointPos.y + 3, attackPointPos.y));
-        var arrowAngle = Vector2.SignedAngle(Vector2.left, arrowDirection);
+        // var arrowDirection = VectorHelper.GetVectorToPoint(transform.position,
+        //     new Vector3(attackPointPos.x, attackPointPos.y + 3, attackPointPos.y));
+        // var arrowAngle = Vector2.SignedAngle(Vector2.left, arrowDirection);
 
         var arrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity)
             .GetComponent<ArrowProjectile>();
-        arrow.Init(this, attackPointPos, 2f, 1f);
+        arrow.Init(this, attackPointPos, 3.75f, 1f);
         // arrow.Init(this, arrowDirection, arrowAngle, 5f);
 
         yield return new WaitForSeconds(AttackRecoveryTime);

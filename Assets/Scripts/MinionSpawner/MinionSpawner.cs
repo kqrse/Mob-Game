@@ -12,10 +12,21 @@ public class MinionSpawner : MonoBehaviour {
     [SerializeField] private PlayerController playerController;
     public PlayerNumber playerNumber;
 
-    private float _spawnCooldown = 0.5f;
+    private float _spawnCooldown = 1.25f;
+    private float _initialSpawnCooldown = 0.3f;
+    private int _initialMinionsSpawned = 0;
+    private int _initialMinionsMax = 7;
     private int _rangedSpawnDelayCurrent = 3;
     private int _rangedSpawnDelayMax = 3;
-    private int _maxMinions = 10;
+    private int _maxMinions = 15;
+
+    private Health _baseHealth;
+    private float _maxHealth = 50;
+    [SerializeField] private GameObject healthBarPrefab;
+    private HealthBar _healthBar;
+
+    private SpriteRenderer _sr;
+    private Rigidbody2D _rb;
 
 
     // private int _magicSpawnDelayCurrent = 3;
@@ -23,21 +34,26 @@ public class MinionSpawner : MonoBehaviour {
     // private int _tankSpawnDelayCurrent = 3;
     // private int _tankSpawnDelayMax = 3;
     private Bounds _spawnBounds;
-
+    public static event EventHandler OnMinionSpawn;
+    
     private void Start() {
         BeginGetComponents();
         BeginAsserts();
-        StartCoroutine(StartSpawnMinion());
+        StartCoroutine(StartSpawnInitialMinion());
     }
-
-    private void Update() {
-    }
-
-    public static event EventHandler OnMinionSpawn;
-
     private IEnumerator StartSpawnMinion() {
+        if (_healthBar == null) yield break;
         yield return new WaitForSeconds(_spawnCooldown);
         StartCoroutine(StartSpawnMinion());
+        SpawnMinion();
+        OnMinionSpawn?.Invoke(this, EventArgs.Empty);
+    }
+
+    private IEnumerator StartSpawnInitialMinion() {
+        yield return new WaitForSeconds(_initialSpawnCooldown);
+        if (_initialMinionsSpawned == _initialMinionsMax) StartCoroutine(StartSpawnMinion());
+        else StartCoroutine(StartSpawnInitialMinion());
+        _initialMinionsSpawned++;
         SpawnMinion();
         OnMinionSpawn?.Invoke(this, EventArgs.Empty);
     }
@@ -65,10 +81,33 @@ public class MinionSpawner : MonoBehaviour {
         Assert.IsNotNull(minion);
         minion.playerNumber = playerNumber;
         playerController.minionsList.Add(minion);
+    }
 
-        // var healthBar = Instantiate(healthBarPrefab, Vector3.zero, Quaternion.identity).GetComponent<HealthBar>();
-        // healthBar.Init(minion.transform, minion.GetComponent<Health>(), 10f);
-        // minion.healthBar = healthBar;
+    private void StartDeath(object e, EventArgs eventArgs) {
+        _baseHealth.OnHealthDepleted -= StartDeath;
+        StartCoroutine(DeathAnimation());
+        StartCoroutine(DelayedHealthbarDeletion());
+    }
+
+    private IEnumerator DelayedHealthbarDeletion() {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(_healthBar.gameObject);
+    }
+
+    private IEnumerator DeathAnimation() {
+        _rb.simulated = false;
+        var newRotation = Quaternion.Euler(0, 0, 90);
+        _sr.sortingLayerName = "Background";
+
+        while (_sr.color.a > 0) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 7.5f);
+            var color = _sr.color;
+            var newAlpha = color.a -= 0.004f;
+            _sr.color = new Color(color.r, color.g, color.b, newAlpha);
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 
     private void BeginAsserts() {
@@ -76,9 +115,18 @@ public class MinionSpawner : MonoBehaviour {
         Assert.IsNotNull(baseMinionPrefab);
         Assert.IsNotNull(bowMinionPrefab);
         Assert.IsNotNull(playerController);
+        Assert.IsNotNull(_rb);
+        Assert.IsNotNull(_sr);
     }
 
     private void BeginGetComponents() {
         _spawnBounds = GetComponentInChildren<BoxCollider2D>().bounds;
+        _baseHealth = GetComponent<Health>();
+        _rb = GetComponent<Rigidbody2D>();
+        _sr = GetComponent<SpriteRenderer>();
+        _baseHealth.Init(_maxHealth);
+        _healthBar = Instantiate(healthBarPrefab, Vector3.zero, Quaternion.identity).GetComponent<HealthBar>();
+        _healthBar.Init(transform, _baseHealth, 18f);
+        _baseHealth.OnHealthDepleted += StartDeath;
     }
 }

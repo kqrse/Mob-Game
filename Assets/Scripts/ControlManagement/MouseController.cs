@@ -51,14 +51,8 @@ public class MouseController : PlayerController {
     }
 
     private void SetMinionDirections() {
-        // var rawMousePos = Input.mousePosition;
-        // Vector2 mousePos = _cam.ScreenToWorldPoint(new Vector2(rawMousePos.x,
-        //     rawMousePos.y));
-        // transform.position = mousePos;
-
         foreach (var m in minionsList) {
-            var minionPos = new Vector2(m.transform.position.x, m.transform.position.y);
-            var direction = _currentMoveVector - minionPos;
+            var direction = (Vector2)(transform.position - m.transform.position);
             if (Mathf.Abs(direction.x) < MovementTolerance) direction.x = 0;
             if (Mathf.Abs(direction.y) < MovementTolerance) direction.y = 0;
             m.animator.SetBool(AnimParams.MinionIsMoving, m.direction.normalized != Vector2.zero);

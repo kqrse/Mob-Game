@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using ControlManagement;
 using Globals;
 using UnityEngine;
@@ -76,34 +77,35 @@ public class BaseMinion : MonoBehaviour {
         var enemiesHit = Physics2D.OverlapCircleAll(attackPointPos, _minionMeleeRangeAOE,
             LayerMask.GetMask("Attackable"));
 
+        var filteredEnemiesHit = new List<Collider2D>();
+        foreach (var enemy in enemiesHit) {
+            if (enemy.CompareTag("Minion")) {
+                if (enemy.GetComponent<BaseMinion>().playerNumber != playerNumber) filteredEnemiesHit.Add(enemy);
+            } else if (enemy.CompareTag("MinionSpawner")) {
+                if (enemy.GetComponent<MinionSpawner>().playerNumber != playerNumber) filteredEnemiesHit.Add(enemy);
+            }
+        }
+
         if (IsAttackAOE) {
-            foreach (var enemyCollider in enemiesHit) {
-                var enemyMinion = enemyCollider.GetComponent<BaseMinion>();
-                if (enemyMinion == null) continue;
-                if (enemyMinion.playerNumber == playerNumber) continue;
+            foreach (var enemyCollider in filteredEnemiesHit) {
                 var enemyHealth = enemyCollider.GetComponent<Health>();
                 enemyHealth.Damage(GetDamageValue());
             }
         }
         else {
-            if (enemiesHit.Length == 0) return;
-            var closestCollider = enemiesHit[0];
+            if (filteredEnemiesHit.Count == 0) return;
+            var closestCollider = filteredEnemiesHit[0];
 
             var closestDistance = Vector2.Distance(attackPointPos, closestCollider.transform.position);
-            foreach (var currentCollider in enemiesHit) {
+            foreach (var currentCollider in filteredEnemiesHit) {
                 var enemyDistance = Vector2.Distance(attackPointPos, currentCollider.transform.position);
                 if (enemyDistance < closestDistance) closestCollider = currentCollider;
             }
 
             // Debug.Log("ATTACKER: " + gameObject.name + " <> " + "TARGET: " + closestCollider.gameObject.name);
-            var enemyMinion = closestCollider.GetComponent<BaseMinion>();
-            if (enemyMinion == null) return;
-
-            if (enemyMinion.playerNumber != playerNumber) {
-                var enemyHealth = closestCollider.gameObject.GetComponent<Health>();
-                Assert.IsNotNull(enemyHealth);
-                enemyHealth.Damage(GetDamageValue());
-            }
+            var enemyHealth = closestCollider.GetComponent<Health>();
+            if (enemyHealth != null) enemyHealth.Damage(GetDamageValue());
+            else Debug.Log("Enemy was hit, but there is no health?");
         }
     }
 
