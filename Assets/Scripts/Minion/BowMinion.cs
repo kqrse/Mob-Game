@@ -12,6 +12,7 @@ public class BowMinion : BaseMinion {
     private MinionRangedRange _minionRangedRange;
     private MinionAttackPoint _minionRangedPoint;
     [SerializeField] private GameObject arrowPrefab;
+    private float _posX;
 
     protected override void Start() {
         InitializeStats();
@@ -21,6 +22,7 @@ public class BowMinion : BaseMinion {
         BeginAsserts();
         // minionHealth.Init(MaxHealth);
         _minionRangedRange.OnRangedRangeEntered += EnterAttack;
+        _posX = _footprintCollider.transform.localPosition.x;
     }
 
     private void InitializeStats() {
@@ -40,6 +42,18 @@ public class BowMinion : BaseMinion {
             return;
 
         StartCoroutine(StartAttack());
+    }
+
+    public override void Move() {
+        if (!animator.GetBool(AnimParams.MinionIsActive)) return;
+        _rb.velocity = direction * MovementSpeed;
+
+        if (_rb.velocity != Vector2.zero)
+            _sr.flipX = direction.x > 0;
+
+        var pos = _footprintCollider.transform.localPosition;
+        if (_sr.flipX) _footprintCollider.transform.localPosition = new Vector3(-_posX, pos.y, pos.z);
+        else _footprintCollider.transform.localPosition = new Vector3(_posX, pos.y, pos.z);
     }
 
     protected override IEnumerator StartAttack() {

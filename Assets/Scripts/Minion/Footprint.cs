@@ -9,6 +9,7 @@ public class Footprint : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     public CircleCollider2D GetFootprintCollider() {

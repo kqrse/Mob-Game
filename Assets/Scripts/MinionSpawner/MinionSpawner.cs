@@ -35,12 +35,13 @@ public class MinionSpawner : MonoBehaviour {
     // private int _tankSpawnDelayMax = 3;
     private Bounds _spawnBounds;
     public static event EventHandler OnMinionSpawn;
-    
+
     private void Start() {
         BeginGetComponents();
         BeginAsserts();
         StartCoroutine(StartSpawnInitialMinion());
     }
+
     private IEnumerator StartSpawnMinion() {
         if (_healthBar == null) yield break;
         yield return new WaitForSeconds(_spawnCooldown);
@@ -124,9 +125,27 @@ public class MinionSpawner : MonoBehaviour {
         _baseHealth = GetComponent<Health>();
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
+        SetPlayerColor();
         _baseHealth.Init(_maxHealth);
         _healthBar = Instantiate(healthBarPrefab, Vector3.zero, Quaternion.identity).GetComponent<HealthBar>();
-        _healthBar.Init(transform, _baseHealth, 18f);
+        _healthBar.Init(transform, _baseHealth, 36f);
         _baseHealth.OnHealthDepleted += StartDeath;
+    }
+
+    private void SetPlayerColor() {
+        switch (playerNumber) {
+            case PlayerNumber.One:
+                _sr.color = PlayerColor.PlayerOneActive;
+                break;
+            case PlayerNumber.Two:
+                _sr.color = PlayerColor.PlayerTwoActive;
+                break;
+            case PlayerNumber.Three:
+                _sr.color = PlayerColor.PlayerThreeActive;
+                break;
+            case PlayerNumber.Four:
+                _sr.color = PlayerColor.PlayerFourActive;
+                break;
+        }
     }
 }

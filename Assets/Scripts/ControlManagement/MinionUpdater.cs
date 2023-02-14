@@ -49,12 +49,12 @@ namespace ControlManagement {
                             playerTwoController.minionsList.Add(minionScript);
                         break;
                     case PlayerNumber.Three:
-                        if (!playerThreeController.minionsList.Contains(minionScript))
-                            playerThreeController.minionsList.Add(minionScript);
+                        // if (!playerThreeController.minionsList.Contains(minionScript))
+                        //     playerThreeController.minionsList.Add(minionScript);
                         break;
                     case PlayerNumber.Four:
-                        if (!playerFourController.minionsList.Contains(minionScript))
-                            playerFourController.minionsList.Add(minionScript);
+                        // if (!playerFourController.minionsList.Contains(minionScript))
+                        //     playerFourController.minionsList.Add(minionScript);
                         break;
                     default:
                         Debug.LogError("minion does not have assigned player number");

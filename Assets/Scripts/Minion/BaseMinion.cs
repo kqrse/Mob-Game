@@ -78,13 +78,14 @@ public class BaseMinion : MonoBehaviour {
             LayerMask.GetMask("Attackable"));
 
         var filteredEnemiesHit = new List<Collider2D>();
-        foreach (var enemy in enemiesHit) {
+        foreach (var enemy in enemiesHit)
             if (enemy.CompareTag("Minion")) {
                 if (enemy.GetComponent<BaseMinion>().playerNumber != playerNumber) filteredEnemiesHit.Add(enemy);
-            } else if (enemy.CompareTag("MinionSpawner")) {
-                if (enemy.GetComponent<MinionSpawner>().playerNumber != playerNumber) filteredEnemiesHit.Add(enemy);
             }
-        }
+            else if (enemy.CompareTag("MinionSpawner")) {
+                if (enemy.GetComponent<MinionSpawner>().playerNumber != playerNumber)
+                    filteredEnemiesHit.Add(enemy);
+            }
 
         if (IsAttackAOE) {
             foreach (var enemyCollider in filteredEnemiesHit) {
@@ -119,7 +120,7 @@ public class BaseMinion : MonoBehaviour {
         return BaseDamage;
     }
 
-    public void Move() {
+    public virtual void Move() {
         if (!animator.GetBool(AnimParams.MinionIsActive)) return;
         _rb.velocity = direction * MovementSpeed;
 
@@ -138,24 +139,24 @@ public class BaseMinion : MonoBehaviour {
         minionHealth.OnHealthDepleted -= StartDeath;
         _minionMeleeRange.OnMeleeRangeEntered -= EnterAttack;
         StartCoroutine(DeathAnimation());
-        StartCoroutine(DelayedHealthbarDeletion());
-    }
-
-    private IEnumerator DelayedHealthbarDeletion() {
-        yield return new WaitForSeconds(0.5f);
-        Destroy(healthBar.gameObject);
     }
 
     protected IEnumerator DeathAnimation() {
         _rb.simulated = false;
         var newRotation = Quaternion.Euler(0, 0, 90);
         _sr.sortingLayerName = "Background";
+        var shadowSR = _footprintCollider.GetComponent<SpriteRenderer>();
 
         while (_sr.color.a > 0) {
             transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 7.5f);
             var color = _sr.color;
-            var newAlpha = color.a -= 0.004f;
+            var newAlpha = color.a -= 0.006f;
             _sr.color = new Color(color.r, color.g, color.b, newAlpha);
+
+            var shadowColor = shadowSR.color;
+            shadowSR.color = new Color(shadowColor.r, shadowColor.g, shadowColor.b, newAlpha / 2f);
+
+            healthBar.SetOpacity(newAlpha / 2f);
             yield return null;
         }
 
@@ -166,6 +167,7 @@ public class BaseMinion : MonoBehaviour {
         GameObject.FindGameObjectWithTag("MinionManager")
             .GetComponent<MinionUpdater>()
             .RemoveMinionFromList(this);
+        Destroy(healthBar.gameObject);
         Destroy(gameObject);
     }
 
@@ -197,12 +199,47 @@ public class BaseMinion : MonoBehaviour {
     protected void BeginGetBaseComponents() {
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
+        SetAsleepPlayerColor();
         animator = GetComponent<Animator>();
         _footprintCollider = GetComponentInChildren<Footprint>().GetFootprintCollider();
         minionHealth = GetComponent<Health>();
         minionHealth.Init(MaxHealth);
         healthBar = Instantiate(healthBarPrefab, Vector3.zero, Quaternion.identity).GetComponent<HealthBar>();
-        healthBar.Init(transform, minionHealth, 10f);
+        healthBar.Init(transform, minionHealth, 16f);
         minionHealth.OnHealthDepleted += StartDeath;
+    }
+
+    public void SetActivePlayerColor() {
+        switch (playerNumber) {
+            case PlayerNumber.One:
+                _sr.color = PlayerColor.PlayerOneActive;
+                break;
+            case PlayerNumber.Two:
+                _sr.color = PlayerColor.PlayerTwoActive;
+                break;
+            case PlayerNumber.Three:
+                _sr.color = PlayerColor.PlayerThreeActive;
+                break;
+            case PlayerNumber.Four:
+                _sr.color = PlayerColor.PlayerFourActive;
+                break;
+        }
+    }
+
+    private void SetAsleepPlayerColor() {
+        switch (playerNumber) {
+            case PlayerNumber.One:
+                _sr.color = PlayerColor.PlayerOneAsleep;
+                break;
+            case PlayerNumber.Two:
+                _sr.color = PlayerColor.PlayerTwoAsleep;
+                break;
+            case PlayerNumber.Three:
+                _sr.color = PlayerColor.PlayerThreeAsleep;
+                break;
+            case PlayerNumber.Four:
+                _sr.color = PlayerColor.PlayerFourAsleep;
+                break;
+        }
     }
 }
